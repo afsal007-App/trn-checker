@@ -1,20 +1,19 @@
-import requests
+import streamlit as st
 
-def solve_captcha(session, page_content):
-    soup = BeautifulSoup(page_content, "html.parser")
-    captcha_img = soup.find("img", {"id": "ContentPlaceHolder1_imgCaptcha"})
-    if captcha_img:
-        img_url = "https://tax.gov.ae" + captcha_img["src"]
-        # Download image
-        img_data = session.get(img_url).content
-        # Send to 2Captcha (requires API key)
-        api_key = "your-2captcha-api-key"
-        response = requests.post(
-            "http://2captcha.com/in.php",
-            data={"key": api_key, "method": "base64", "body": img_data}
-        )
-        captcha_id = response.text.split("|")[1]
-        # Get result
-        result = requests.get(f"http://2captcha.com/res.php?key={api_key}&action=get&id={captcha_id}")
-        return result.text.split("|")[1]
-    return None
+# Simple Streamlit app for TRN input
+def main():
+    st.title("UAE TRN Checker (Simplified)")
+    st.write("Enter a 15-digit Tax Registration Number (TRN) to verify it.")
+
+    # Input for TRN
+    trn = st.text_input("Enter TRN (15 digits)", max_chars=15)
+
+    if st.button("Check TRN"):
+        if len(trn) != 15 or not trn.isdigit():
+            st.error("Please enter a valid 15-digit TRN.")
+        else:
+            # Placeholder response (mock validation)
+            st.success(f"TRN {trn} is valid! (This is a mock response.)")
+
+if __name__ == "__main__":
+    main()
